@@ -2,9 +2,12 @@
 
 import { useState, useEffect, Dispatch, SetStateAction } from 'react';
 
+// A little utility function to check if we're running on the server.
+const isSsr = typeof window === 'undefined';
+
 function useLocalStorage<T>(key: string, initialValue: T): [T, Dispatch<SetStateAction<T>>] {
   const [storedValue, setStoredValue] = useState<T>(() => {
-    if (typeof window === 'undefined') {
+    if (isSsr) {
       return initialValue;
     }
     try {
@@ -17,10 +20,11 @@ function useLocalStorage<T>(key: string, initialValue: T): [T, Dispatch<SetState
   });
 
   useEffect(() => {
+    if (isSsr) {
+      return;
+    }
     try {
-      if (typeof window !== 'undefined') {
-        window.localStorage.setItem(key, JSON.stringify(storedValue));
-      }
+      window.localStorage.setItem(key, JSON.stringify(storedValue));
     } catch (error) {
       console.error(error);
     }
