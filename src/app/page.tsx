@@ -1,5 +1,5 @@
 import { MainDashboard } from '@/components/app/main-dashboard';
-import { Dumbbell } from 'lucide-react';
+import { Dumbbell, Github, Instagram, Mail } from 'lucide-react';
 
 export default function Home() {
   return (
@@ -20,8 +20,19 @@ export default function Home() {
       <footer className="py-6 md:px-8 md:py-0">
         <div className="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
           <p className="text-balance text-center text-sm leading-loose text-muted-foreground md:text-left">
-            Construído com ❤️. Seu companheiro de fitness tudo-em-um.
+            Dev.Pablo
           </p>
+          <div className="flex gap-4 items-center">
+            <a href="https://github.com/4fear1" target="_blank" rel="noopener noreferrer">
+              <Github className="h-5 w-5 text-muted-foreground hover:text-foreground transition-colors" />
+            </a>
+            <a href="https://www.instagram.com/pbo_777" target="_blank" rel="noopener noreferrer">
+              <Instagram className="h-5 w-5 text-muted-foreground hover:text-foreground transition-colors" />
+            </a>
+            <a href="mailto:4fear777@gmail.com">
+              <Mail className="h-5 w-5 text-muted-foreground hover:text-foreground transition-colors" />
+            </a>
+          </div>
         </div>
       </footer>
     </div>
