@@ -11,8 +11,9 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { Dumbbell, Plus, Trash2 } from 'lucide-react';
+import Image from 'next/image';
 
-type Exercise = { name: string; series: string; reps: string; rest: string; completed: boolean; id: number };
+type Exercise = { name: string; series: string; reps: string; rest: string; completed: boolean; id: number; gifUrl?: string };
 type WorkoutPlans = { [key: string]: Exercise[] };
 
 export function WorkoutTab() {
@@ -28,6 +29,7 @@ export function WorkoutTab() {
   const [exerciseSeries, setExerciseSeries] = useState('');
   const [exerciseReps, setExerciseReps] = useState('');
   const [exerciseRest, setExerciseRest] = useState('');
+  const [exerciseGifUrl, setExerciseGifUrl] = useState('');
   
   const handleAddPlan = () => {
     if (newPlanName && !plans[newPlanName]) {
@@ -62,13 +64,22 @@ export function WorkoutTab() {
   
   const handleAddExercise = () => {
     if (exerciseName && exerciseSeries && exerciseReps && exerciseRest) {
-      const newExercise = { name: exerciseName, series: exerciseSeries, reps: exerciseReps, rest: exerciseRest, completed: false, id: Date.now() };
+      const newExercise: Exercise = { 
+        name: exerciseName, 
+        series: exerciseSeries, 
+        reps: exerciseReps, 
+        rest: exerciseRest, 
+        completed: false, 
+        id: Date.now(),
+        gifUrl: exerciseGifUrl
+      };
       const newPlans = { ...plans, [activePlan]: [...plans[activePlan], newExercise] };
       setPlans(newPlans);
       setExerciseName('');
       setExerciseSeries('');
       setExerciseReps('');
       setExerciseRest('');
+      setExerciseGifUrl('');
       setAddExerciseOpen(false);
     } else {
       toast({
@@ -137,6 +148,13 @@ export function WorkoutTab() {
                       </CardTitle>
                       <CardDescription>{`Séries: ${ex.series} | Repetições: ${ex.reps} | Descanso: ${ex.rest}`}</CardDescription>
                     </CardHeader>
+                    <CardContent>
+                      {ex.gifUrl && (
+                        <div className="relative h-40 w-full mb-4 rounded-md overflow-hidden">
+                          <Image src={ex.gifUrl} alt={`GIF para ${ex.name}`} layout="fill" objectFit="cover" unoptimized />
+                        </div>
+                      )}
+                    </CardContent>
                     <CardFooter>
                       <div className="flex items-center space-x-2">
                         <Checkbox id={`cb-${ex.id}`} checked={ex.completed} onCheckedChange={() => toggleExerciseComplete(ex.id)} />
@@ -165,6 +183,7 @@ export function WorkoutTab() {
                 <Input placeholder="Repetições" value={exerciseReps} onChange={e => setExerciseReps(e.target.value)} />
                 <Input placeholder="Descanso" value={exerciseRest} onChange={e => setExerciseRest(e.target.value)} />
               </div>
+              <Input placeholder="URL do GIF do Exercício (opcional)" value={exerciseGifUrl} onChange={e => setExerciseGifUrl(e.target.value)} />
             </div>
             <DialogFooter><Button onClick={handleAddExercise}>Salvar Exercício</Button></DialogFooter>
           </DialogContent>
