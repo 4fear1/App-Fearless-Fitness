@@ -1,19 +1,16 @@
 "use client";
 
-import { useState, useTransition } from 'react';
+import { useState } from 'react';
 import useLocalStorage from '@/hooks/use-local-storage';
-import { generatePersonalizedWorkoutPlan } from '@/ai/flows/generate-personalized-workout-plan';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
-import { Dumbbell, Loader2, Plus, Trash2, Wand2 } from 'lucide-react';
+import { Dumbbell, Plus, Trash2 } from 'lucide-react';
 
 type Exercise = { name: string; series: string; reps: string; rest: string; completed: boolean; id: number };
 type WorkoutPlans = { [key: string]: Exercise[] };
@@ -32,12 +29,6 @@ export function WorkoutTab() {
   const [exerciseReps, setExerciseReps] = useState('');
   const [exerciseRest, setExerciseRest] = useState('');
   
-  const [isGenerating, startTransition] = useTransition();
-  const [isGenerateOpen, setGenerateOpen] = useState(false);
-  const [fitnessLevel, setFitnessLevel] = useState('beginner');
-  const [goals, setGoals] = useState('');
-  const [equipment, setEquipment] = useState('');
-
   const handleAddPlan = () => {
     if (newPlanName && !plans[newPlanName]) {
       const newPlans = { ...plans, [newPlanName]: [] };
@@ -98,57 +89,6 @@ export function WorkoutTab() {
     setPlans(newPlans);
   };
   
-  const handleGeneratePlan = () => {
-    if (!goals || !equipment) {
-      toast({
-        variant: 'destructive',
-        title: 'Informação em Falta',
-        description: 'Por favor, forneça seus objetivos e equipamentos disponíveis.',
-      });
-      return;
-    }
-    startTransition(async () => {
-      try {
-        const result = await generatePersonalizedWorkoutPlan({ fitnessLevel, goals, equipment });
-        const parsedExercises: Exercise[] = result.workoutPlan.split('\n\n').map(exString => {
-            const [name, details] = exString.split('\n');
-            const seriesMatch = details?.match(/Séries: ([\w\d\s-]+)/);
-            const repsMatch = details?.match(/Repetições: ([\w\d\s-]+)/);
-            const restMatch = details?.match(/Descanso: ([\w\d\s-]+)/);
-            return {
-                name: name || "Exercício sem nome",
-                series: seriesMatch?.[1] || '3',
-                reps: repsMatch?.[1] || '10',
-                rest: restMatch?.[1] || '60s',
-                completed: false,
-                id: Date.now() + Math.random(),
-            };
-        }).filter(ex => ex.name !== "Exercício sem nome");
-        
-        const newPlanName = `Plano IA - ${new Date().toLocaleDateString()}`;
-        const newPlans = { ...plans, [newPlanName]: parsedExercises };
-        setPlans(newPlans);
-        setActivePlan(newPlanName);
-
-        toast({
-          title: 'Plano de Treino Gerado!',
-          description: `Seu novo plano "${newPlanName}" foi adicionado.`,
-        });
-        setGenerateOpen(false);
-        setGoals('');
-        setEquipment('');
-
-      } catch (error) {
-        console.error(error);
-        toast({
-          variant: 'destructive',
-          title: 'Falha na Geração',
-          description: 'Não foi possível gerar o plano de treino. Por favor, tente novamente.',
-        });
-      }
-    });
-  };
-
   const planNames = Object.keys(plans);
 
   return (
@@ -181,7 +121,7 @@ export function WorkoutTab() {
                 <CardHeader>
                   <Dumbbell className="mx-auto h-12 w-12 text-muted-foreground" />
                   <CardTitle>Treino Vazio</CardTitle>
-                  <CardDescription>Adicione um exercício ou gere um plano com IA para começar.</CardDescription>
+                  <CardDescription>Adicione um exercício para começar.</CardDescription>
                 </CardHeader>
               </Card>
             ) : (
@@ -227,33 +167,6 @@ export function WorkoutTab() {
               </div>
             </div>
             <DialogFooter><Button onClick={handleAddExercise}>Salvar Exercício</Button></DialogFooter>
-          </DialogContent>
-        </Dialog>
-
-        <Dialog open={isGenerateOpen} onOpenChange={setGenerateOpen}>
-          <DialogTrigger asChild><Button variant="secondary" disabled={!activePlan}><Wand2 className="mr-2 h-4 w-4" /> Gerar com IA</Button></DialogTrigger>
-          <DialogContent>
-            <DialogHeader><DialogTitle>Gerar Plano de Treino</DialogTitle></DialogHeader>
-            <div className="space-y-4">
-              <div><Label>Nível de Fitness</Label>
-                <Select value={fitnessLevel} onValueChange={setFitnessLevel}>
-                  <SelectTrigger><SelectValue placeholder="Selecione o nível" /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="beginner">Iniciante</SelectItem>
-                    <SelectItem value="intermediate">Intermediário</SelectItem>
-                    <SelectItem value="advanced">Avançado</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div><Label>Objetivos de Fitness</Label><Textarea placeholder="ex: Ganhar massa muscular, perder peso" value={goals} onChange={e => setGoals(e.target.value)} /></div>
-              <div><Label>Equipamentos Disponíveis</Label><Textarea placeholder="ex: Halteres, faixas de resistência, esteira" value={equipment} onChange={e => setEquipment(e.target.value)} /></div>
-            </div>
-            <DialogFooter>
-              <Button onClick={handleGeneratePlan} disabled={isGenerating}>
-                {isGenerating && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Gerar Plano
-              </Button>
-            </DialogFooter>
           </DialogContent>
         </Dialog>
       </div>
