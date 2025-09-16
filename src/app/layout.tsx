@@ -3,7 +3,7 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'Hub de Fitness Pessoal',
+  title: 'fearless',
   description: 'Seu companheiro de fitness tudo-em-um',
 };
 
