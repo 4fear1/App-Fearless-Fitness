@@ -20,7 +20,7 @@ type WorkoutPlans = { [key: string]: Exercise[] };
 
 export function WorkoutTab() {
   const { toast } = useToast();
-  const [plans, setPlans] = useLocalStorage<WorkoutPlans>('my-workouts', { 'Workout A': [] });
+  const [plans, setPlans] = useLocalStorage<WorkoutPlans>('my-workouts', { 'Treino A': [] });
   const [activePlan, setActivePlan] = useState(Object.keys(plans)[0] || '');
 
   const [isAddPlanOpen, setAddPlanOpen] = useState(false);
@@ -48,8 +48,8 @@ export function WorkoutTab() {
     } else {
       toast({
         variant: "destructive",
-        title: "Error",
-        description: "Plan name is invalid or already exists.",
+        title: "Erro",
+        description: "O nome do plano é inválido ou já existe.",
       });
     }
   };
@@ -58,8 +58,8 @@ export function WorkoutTab() {
     if (Object.keys(plans).length <= 1) {
       toast({
         variant: "destructive",
-        title: "Cannot remove",
-        description: "You must have at least one workout plan.",
+        title: "Não é possível remover",
+        description: "Você deve ter pelo menos um plano de treino.",
       });
       return;
     }
@@ -82,8 +82,8 @@ export function WorkoutTab() {
     } else {
       toast({
         variant: "destructive",
-        title: "Error",
-        description: "Please fill out all exercise fields.",
+        title: "Erro",
+        description: "Por favor, preencha todos os campos do exercício.",
       });
     }
   };
@@ -102,8 +102,8 @@ export function WorkoutTab() {
     if (!goals || !equipment) {
       toast({
         variant: 'destructive',
-        title: 'Missing Information',
-        description: 'Please provide your goals and available equipment.',
+        title: 'Informação em Falta',
+        description: 'Por favor, forneça seus objetivos e equipamentos disponíveis.',
       });
       return;
     }
@@ -112,27 +112,27 @@ export function WorkoutTab() {
         const result = await generatePersonalizedWorkoutPlan({ fitnessLevel, goals, equipment });
         const parsedExercises: Exercise[] = result.workoutPlan.split('\n\n').map(exString => {
             const [name, details] = exString.split('\n');
-            const seriesMatch = details?.match(/Series: ([\w\d\s-]+)/);
-            const repsMatch = details?.match(/Reps: ([\w\d\s-]+)/);
-            const restMatch = details?.match(/Rest: ([\w\d\s-]+)/);
+            const seriesMatch = details?.match(/Séries: ([\w\d\s-]+)/);
+            const repsMatch = details?.match(/Repetições: ([\w\d\s-]+)/);
+            const restMatch = details?.match(/Descanso: ([\w\d\s-]+)/);
             return {
-                name: name || "Unnamed Exercise",
+                name: name || "Exercício sem nome",
                 series: seriesMatch?.[1] || '3',
                 reps: repsMatch?.[1] || '10',
                 rest: restMatch?.[1] || '60s',
                 completed: false,
                 id: Date.now() + Math.random(),
             };
-        }).filter(ex => ex.name !== "Unnamed Exercise");
+        }).filter(ex => ex.name !== "Exercício sem nome");
         
-        const newPlanName = `AI Plan - ${new Date().toLocaleDateString()}`;
+        const newPlanName = `Plano IA - ${new Date().toLocaleDateString()}`;
         const newPlans = { ...plans, [newPlanName]: parsedExercises };
         setPlans(newPlans);
         setActivePlan(newPlanName);
 
         toast({
-          title: 'Workout Plan Generated!',
-          description: `Your new plan "${newPlanName}" has been added.`,
+          title: 'Plano de Treino Gerado!',
+          description: `Seu novo plano "${newPlanName}" foi adicionado.`,
         });
         setGenerateOpen(false);
         setGoals('');
@@ -142,8 +142,8 @@ export function WorkoutTab() {
         console.error(error);
         toast({
           variant: 'destructive',
-          title: 'Generation Failed',
-          description: 'Could not generate workout plan. Please try again.',
+          title: 'Falha na Geração',
+          description: 'Não foi possível gerar o plano de treino. Por favor, tente novamente.',
         });
       }
     });
@@ -166,10 +166,10 @@ export function WorkoutTab() {
             ))}
           </TabsList>
           <Dialog open={isAddPlanOpen} onOpenChange={setAddPlanOpen}>
-            <DialogTrigger asChild><Button variant="outline" size="sm"><Plus className="mr-2 h-4 w-4" /> Add Plan</Button></DialogTrigger>
-            <DialogContent><DialogHeader><DialogTitle>Add New Workout Plan</DialogTitle></DialogHeader>
-              <Input placeholder="e.g. Leg Day" value={newPlanName} onChange={e => setNewPlanName(e.target.value)} />
-              <DialogFooter><Button onClick={handleAddPlan}>Save Plan</Button></DialogFooter>
+            <DialogTrigger asChild><Button variant="outline" size="sm"><Plus className="mr-2 h-4 w-4" /> Adicionar Plano</Button></DialogTrigger>
+            <DialogContent><DialogHeader><DialogTitle>Adicionar Novo Plano de Treino</DialogTitle></DialogHeader>
+              <Input placeholder="ex: Dia de Perna" value={newPlanName} onChange={e => setNewPlanName(e.target.value)} />
+              <DialogFooter><Button onClick={handleAddPlan}>Salvar Plano</Button></DialogFooter>
             </DialogContent>
           </Dialog>
         </div>
@@ -180,8 +180,8 @@ export function WorkoutTab() {
               <Card className="text-center py-12">
                 <CardHeader>
                   <Dumbbell className="mx-auto h-12 w-12 text-muted-foreground" />
-                  <CardTitle>Empty Workout</CardTitle>
-                  <CardDescription>Add an exercise or generate a plan with AI to get started.</CardDescription>
+                  <CardTitle>Treino Vazio</CardTitle>
+                  <CardDescription>Adicione um exercício ou gere um plano com IA para começar.</CardDescription>
                 </CardHeader>
               </Card>
             ) : (
@@ -195,13 +195,13 @@ export function WorkoutTab() {
                           <Trash2 className="h-4 w-4 text-muted-foreground" />
                         </Button>
                       </CardTitle>
-                      <CardDescription>{`Sets: ${ex.series} | Reps: ${ex.reps} | Rest: ${ex.rest}`}</CardDescription>
+                      <CardDescription>{`Séries: ${ex.series} | Repetições: ${ex.reps} | Descanso: ${ex.rest}`}</CardDescription>
                     </CardHeader>
                     <CardFooter>
                       <div className="flex items-center space-x-2">
                         <Checkbox id={`cb-${ex.id}`} checked={ex.completed} onCheckedChange={() => toggleExerciseComplete(ex.id)} />
                         <Label htmlFor={`cb-${ex.id}`} className="text-sm font-medium leading-none cursor-pointer">
-                          Mark as completed
+                          Marcar como concluído
                         </Label>
                       </div>
                     </CardFooter>
@@ -215,43 +215,43 @@ export function WorkoutTab() {
       
       <div className="flex flex-wrap gap-4 pt-4 border-t">
         <Dialog open={isAddExerciseOpen} onOpenChange={setAddExerciseOpen}>
-          <DialogTrigger asChild><Button disabled={!activePlan}><Plus className="mr-2 h-4 w-4" /> Add Exercise</Button></DialogTrigger>
+          <DialogTrigger asChild><Button disabled={!activePlan}><Plus className="mr-2 h-4 w-4" /> Adicionar Exercício</Button></DialogTrigger>
           <DialogContent>
-            <DialogHeader><DialogTitle>Add Exercise to {activePlan}</DialogTitle></DialogHeader>
+            <DialogHeader><DialogTitle>Adicionar Exercício a {activePlan}</DialogTitle></DialogHeader>
             <div className="space-y-4">
-              <Input placeholder="Exercise Name" value={exerciseName} onChange={e => setExerciseName(e.target.value)} />
+              <Input placeholder="Nome do Exercício" value={exerciseName} onChange={e => setExerciseName(e.target.value)} />
               <div className="grid grid-cols-3 gap-2">
-                <Input placeholder="Series" value={exerciseSeries} onChange={e => setExerciseSeries(e.target.value)} />
-                <Input placeholder="Reps" value={exerciseReps} onChange={e => setExerciseReps(e.target.value)} />
-                <Input placeholder="Rest" value={exerciseRest} onChange={e => setExerciseRest(e.target.value)} />
+                <Input placeholder="Séries" value={exerciseSeries} onChange={e => setExerciseSeries(e.target.value)} />
+                <Input placeholder="Repetições" value={exerciseReps} onChange={e => setExerciseReps(e.target.value)} />
+                <Input placeholder="Descanso" value={exerciseRest} onChange={e => setExerciseRest(e.target.value)} />
               </div>
             </div>
-            <DialogFooter><Button onClick={handleAddExercise}>Save Exercise</Button></DialogFooter>
+            <DialogFooter><Button onClick={handleAddExercise}>Salvar Exercício</Button></DialogFooter>
           </DialogContent>
         </Dialog>
 
         <Dialog open={isGenerateOpen} onOpenChange={setGenerateOpen}>
-          <DialogTrigger asChild><Button variant="secondary" disabled={!activePlan}><Wand2 className="mr-2 h-4 w-4" /> Generate with AI</Button></DialogTrigger>
+          <DialogTrigger asChild><Button variant="secondary" disabled={!activePlan}><Wand2 className="mr-2 h-4 w-4" /> Gerar com IA</Button></DialogTrigger>
           <DialogContent>
-            <DialogHeader><DialogTitle>Generate Workout Plan</DialogTitle></DialogHeader>
+            <DialogHeader><DialogTitle>Gerar Plano de Treino</DialogTitle></DialogHeader>
             <div className="space-y-4">
-              <div><Label>Fitness Level</Label>
+              <div><Label>Nível de Fitness</Label>
                 <Select value={fitnessLevel} onValueChange={setFitnessLevel}>
-                  <SelectTrigger><SelectValue placeholder="Select level" /></SelectTrigger>
+                  <SelectTrigger><SelectValue placeholder="Selecione o nível" /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="beginner">Beginner</SelectItem>
-                    <SelectItem value="intermediate">Intermediate</SelectItem>
-                    <SelectItem value="advanced">Advanced</SelectItem>
+                    <SelectItem value="beginner">Iniciante</SelectItem>
+                    <SelectItem value="intermediate">Intermediário</SelectItem>
+                    <SelectItem value="advanced">Avançado</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
-              <div><Label>Fitness Goals</Label><Textarea placeholder="e.g., Build muscle, lose weight" value={goals} onChange={e => setGoals(e.target.value)} /></div>
-              <div><Label>Available Equipment</Label><Textarea placeholder="e.g., Dumbbells, resistance bands, treadmill" value={equipment} onChange={e => setEquipment(e.target.value)} /></div>
+              <div><Label>Objetivos de Fitness</Label><Textarea placeholder="ex: Ganhar massa muscular, perder peso" value={goals} onChange={e => setGoals(e.target.value)} /></div>
+              <div><Label>Equipamentos Disponíveis</Label><Textarea placeholder="ex: Halteres, faixas de resistência, esteira" value={equipment} onChange={e => setEquipment(e.target.value)} /></div>
             </div>
             <DialogFooter>
               <Button onClick={handleGeneratePlan} disabled={isGenerating}>
                 {isGenerating && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Generate Plan
+                Gerar Plano
               </Button>
             </DialogFooter>
           </DialogContent>

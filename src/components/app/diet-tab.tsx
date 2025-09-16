@@ -28,8 +28,8 @@ export function DietTab() {
     } else {
       toast({
         variant: "destructive",
-        title: "Error",
-        description: "Please fill out all meal fields.",
+        title: "Erro",
+        description: "Por favor, preencha todos os campos da refeição.",
       });
     }
   };
@@ -41,31 +41,31 @@ export function DietTab() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold font-headline">My Meals</h2>
+        <h2 className="text-2xl font-bold font-headline">Minhas Refeições</h2>
         <Dialog open={isModalOpen} onOpenChange={setModalOpen}>
           <DialogTrigger asChild>
             <Button>
-              <Plus className="mr-2 h-4 w-4" /> Add Meal
+              <Plus className="mr-2 h-4 w-4" /> Adicionar Refeição
             </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Add a New Meal</DialogTitle>
+              <DialogTitle>Adicionar uma Nova Refeição</DialogTitle>
             </DialogHeader>
             <div className="space-y-4">
               <Input
-                placeholder="Meal Name (e.g., Breakfast)"
+                placeholder="Nome da Refeição (ex: Café da Manhã)"
                 value={mealName}
                 onChange={(e) => setMealName(e.target.value)}
               />
               <Textarea
-                placeholder="Description of food items"
+                placeholder="Descrição dos alimentos"
                 value={mealDesc}
                 onChange={(e) => setMealDesc(e.target.value)}
               />
             </div>
             <DialogFooter>
-              <Button onClick={handleAddMeal}>Save Meal</Button>
+              <Button onClick={handleAddMeal}>Salvar Refeição</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
@@ -75,8 +75,8 @@ export function DietTab() {
         <Card className="text-center py-12">
           <CardHeader>
             <Utensils className="mx-auto h-12 w-12 text-muted-foreground" />
-            <CardTitle>No Meals Logged</CardTitle>
-            <CardDescription>Click "Add Meal" to start tracking your diet.</CardDescription>
+            <CardTitle>Nenhuma Refeição Registrada</CardTitle>
+            <CardDescription>Clique em "Adicionar Refeição" para começar a monitorar sua dieta.</CardDescription>
           </CardHeader>
         </Card>
       ) : (
@@ -91,7 +91,7 @@ export function DietTab() {
               </CardContent>
               <CardFooter>
                 <Button variant="ghost" size="sm" onClick={() => handleRemoveMeal(meal.id)}>
-                  <Trash2 className="mr-2 h-4 w-4" /> Remove
+                  <Trash2 className="mr-2 h-4 w-4" /> Remover
                 </Button>
               </CardFooter>
             </Card>

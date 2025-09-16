@@ -39,13 +39,13 @@ const prompt = ai.definePrompt({
   name: 'generatePersonalizedWorkoutPlanPrompt',
   input: {schema: GeneratePersonalizedWorkoutPlanInputSchema},
   output: {schema: GeneratePersonalizedWorkoutPlanOutputSchema},
-  prompt: `You are a personal trainer. Generate a workout plan based on the user's fitness level, goals, and available equipment.
+  prompt: `Você é um personal trainer. Gere um plano de treino com base no nível de condicionamento físico, objetivos e equipamentos disponíveis do usuário. Formate cada exercício com o nome do exercício em uma linha e os detalhes (Séries, Repetições, Descanso) na linha seguinte, separados por nova linha dupla.
 
-Fitness Level: {{{fitnessLevel}}}
-Goals: {{{goals}}}
-Equipment: {{{equipment}}}
+Nível de Fitness: {{{fitnessLevel}}}
+Objetivos: {{{goals}}}
+Equipamento: {{{equipment}}}
 
-Workout Plan:`,
+Plano de Treino:`,
 });
 
 const generatePersonalizedWorkoutPlanFlow = ai.defineFlow(

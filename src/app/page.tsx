@@ -9,7 +9,7 @@ export default function Home() {
           <div className="flex items-center gap-3">
             <Dumbbell className="h-8 w-8 text-primary" />
             <h1 className="text-2xl md:text-3xl font-bold text-foreground font-headline">
-              Personal Fitness Hub
+              Hub de Fitness Pessoal
             </h1>
           </div>
         </div>
@@ -20,7 +20,7 @@ export default function Home() {
       <footer className="py-6 md:px-8 md:py-0">
         <div className="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
           <p className="text-balance text-center text-sm leading-loose text-muted-foreground md:text-left">
-            Built with ❤️. Your all-in-one fitness companion.
+            Construído com ❤️. Seu companheiro de fitness tudo-em-um.
           </p>
         </div>
       </footer>

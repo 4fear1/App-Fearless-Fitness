@@ -12,15 +12,15 @@ export function MainDashboard() {
       <TabsList className="grid w-full grid-cols-3 h-14 rounded-lg">
         <TabsTrigger value="workout" className="text-sm md:text-base h-full gap-2 rounded-l-md">
           <Dumbbell className="h-5 w-5" />
-          Workout
+          Treino
         </TabsTrigger>
         <TabsTrigger value="diet" className="text-sm md:text-base h-full gap-2">
           <Utensils className="h-5 w-5" />
-          Diet
+          Dieta
         </TabsTrigger>
         <TabsTrigger value="calculators" className="text-sm md:text-base h-full gap-2 rounded-r-md">
           <Calculator className="h-5 w-5" />
-          Calculators
+          Calculadoras
         </TabsTrigger>
       </TabsList>
       <TabsContent value="workout" className="mt-6">

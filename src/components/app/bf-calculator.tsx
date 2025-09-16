@@ -26,7 +26,7 @@ export function BodyFatCalculator() {
       if (h > 0 && n > 0 && w > 0) {
         bf = 495 / (1.0324 - 0.19077 * Math.log10(w - n) + 0.15456 * Math.log10(h)) - 450;
       } else {
-        setResult('Please fill in all fields correctly.');
+        setResult('Por favor, preencha todos os campos corretamente.');
         return;
       }
     } else {
@@ -34,15 +34,15 @@ export function BodyFatCalculator() {
       if (h > 0 && n > 0 && w > 0 && hipVal > 0) {
         bf = 495 / (1.29579 - 0.35004 * Math.log10(w + hipVal - n) + 0.22100 * Math.log10(h)) - 450;
       } else {
-        setResult('Please fill in all fields correctly.');
+        setResult('Por favor, preencha todos os campos corretamente.');
         return;
       }
     }
 
     if (bf > 0) {
-      setResult(`Your estimated body fat is ${bf.toFixed(1)}%.`);
+      setResult(`Sua gordura corporal estimada é de ${bf.toFixed(1)}%.`);
     } else {
-      setResult('Calculation failed. Please check your measurements.');
+      setResult('O cálculo falhou. Por favor, verifique suas medidas.');
     }
   };
 
@@ -51,30 +51,30 @@ export function BodyFatCalculator() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <SlidersHorizontal className="text-primary" />
-          Body Fat Calculator
+          Calculadora de Gordura Corporal
         </CardTitle>
-        <CardDescription>Estimate your body fat percentage.</CardDescription>
+        <CardDescription>Estime o seu percentual de gordura corporal.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div>
-          <Label>Gender</Label>
+          <Label>Gênero</Label>
           <RadioGroup defaultValue="male" onValueChange={(val) => { setGender(val); setResult(''); }} className="flex gap-4 pt-2">
-            <div className="flex items-center space-x-2"><RadioGroupItem value="male" id="male" /><Label htmlFor="male">Male</Label></div>
-            <div className="flex items-center space-x-2"><RadioGroupItem value="female" id="female" /><Label htmlFor="female">Female</Label></div>
+            <div className="flex items-center space-x-2"><RadioGroupItem value="male" id="male" /><Label htmlFor="male">Masculino</Label></div>
+            <div className="flex items-center space-x-2"><RadioGroupItem value="female" id="female" /><Label htmlFor="female">Feminino</Label></div>
           </RadioGroup>
         </div>
         <div className="grid grid-cols-3 gap-2">
-          <div><Label htmlFor="height-bf">Height (cm)</Label><Input id="height-bf" type="number" value={height} onChange={e => setHeight(e.target.value)} /></div>
-          <div><Label htmlFor="neck-bf">Neck (cm)</Label><Input id="neck-bf" type="number" value={neck} onChange={e => setNeck(e.target.value)} /></div>
-          <div><Label htmlFor="waist-bf">Waist (cm)</Label><Input id="waist-bf" type="number" value={waist} onChange={e => setWaist(e.target.value)} /></div>
+          <div><Label htmlFor="height-bf">Altura (cm)</Label><Input id="height-bf" type="number" value={height} onChange={e => setHeight(e.target.value)} /></div>
+          <div><Label htmlFor="neck-bf">Pescoço (cm)</Label><Input id="neck-bf" type="number" value={neck} onChange={e => setNeck(e.target.value)} /></div>
+          <div><Label htmlFor="waist-bf">Cintura (cm)</Label><Input id="waist-bf" type="number" value={waist} onChange={e => setWaist(e.target.value)} /></div>
         </div>
         {gender === 'female' && (
           <div>
-            <Label htmlFor="hip-bf">Hip (cm)</Label>
-            <Input id="hip-bf" type="number" value={hip} onChange={e => setHip(e.target.value)} placeholder="Required for female" />
+            <Label htmlFor="hip-bf">Quadril (cm)</Label>
+            <Input id="hip-bf" type="number" value={hip} onChange={e => setHip(e.target.value)} placeholder="Necessário para mulheres" />
           </div>
         )}
-        <Button onClick={calculateBf} className="w-full">Calculate</Button>
+        <Button onClick={calculateBf} className="w-full">Calcular</Button>
       </CardContent>
       {result && (
         <CardFooter>

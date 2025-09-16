@@ -15,9 +15,9 @@ export function WaterCalculator() {
     const w = parseFloat(weight);
     if (w > 0) {
       const ml = (w * 35).toFixed(0);
-      setResult(`You should drink about ${ml} ml (${(+ml / 1000).toFixed(2)} L) of water per day.`);
+      setResult(`Você deve beber cerca de ${ml} ml (${(+ml / 1000).toFixed(2)} L) de água por dia.`);
     } else {
-      setResult('Please enter a valid weight.');
+      setResult('Por favor, insira um peso válido.');
     }
   };
 
@@ -26,23 +26,23 @@ export function WaterCalculator() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Droplets className="text-primary" />
-          Daily Water Intake
+          Consumo Diário de Água
         </CardTitle>
-        <CardDescription>Estimate your daily hydration needs.</CardDescription>
+        <CardDescription>Estime suas necessidades diárias de hidratação.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div>
-          <Label htmlFor="weight-water">Your Weight (kg)</Label>
+          <Label htmlFor="weight-water">Seu Peso (kg)</Label>
           <Input
             id="weight-water"
             type="number"
             value={weight}
             onChange={(e) => setWeight(e.target.value)}
-            placeholder="e.g., 70"
-            aria-label="Weight for water calculation"
+            placeholder="ex: 70"
+            aria-label="Peso para cálculo de água"
           />
         </div>
-        <Button onClick={calculateWater} className="w-full">Calculate</Button>
+        <Button onClick={calculateWater} className="w-full">Calcular</Button>
       </CardContent>
       {result && (
         <CardFooter>

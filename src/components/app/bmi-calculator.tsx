@@ -18,13 +18,13 @@ export function BmiCalculator() {
     if (w > 0 && h > 0) {
       const bmi = w / (h * h);
       let status = '';
-      if (bmi < 18.5) status = 'Underweight';
-      else if (bmi < 25) status = 'Normal weight';
-      else if (bmi < 30) status = 'Overweight';
-      else status = 'Obesity';
-      setResult(`Your BMI is ${bmi.toFixed(1)} (${status}).`);
+      if (bmi < 18.5) status = 'Abaixo do peso';
+      else if (bmi < 25) status = 'Peso normal';
+      else if (bmi < 30) status = 'Sobrepeso';
+      else status = 'Obesidade';
+      setResult(`Seu IMC é ${bmi.toFixed(1)} (${status}).`);
     } else {
-      setResult('Please enter valid weight and height.');
+      setResult('Por favor, insira peso e altura válidos.');
     }
   };
 
@@ -33,22 +33,22 @@ export function BmiCalculator() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Scale className="text-primary" />
-          BMI Calculator
+          Calculadora de IMC
         </CardTitle>
-        <CardDescription>Calculate your Body Mass Index.</CardDescription>
+        <CardDescription>Calcule seu Índice de Massa Corporal.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <Label htmlFor="weight-bmi">Weight (kg)</Label>
-            <Input id="weight-bmi" type="number" value={weight} onChange={(e) => setWeight(e.target.value)} placeholder="e.g., 70" />
+            <Label htmlFor="weight-bmi">Peso (kg)</Label>
+            <Input id="weight-bmi" type="number" value={weight} onChange={(e) => setWeight(e.target.value)} placeholder="ex: 70" />
           </div>
           <div>
-            <Label htmlFor="height-bmi">Height (m)</Label>
-            <Input id="height-bmi" type="number" value={height} onChange={(e) => setHeight(e.target.value)} placeholder="e.g., 1.75" />
+            <Label htmlFor="height-bmi">Altura (m)</Label>
+            <Input id="height-bmi" type="number" value={height} onChange={(e) => setHeight(e.target.value)} placeholder="ex: 1.75" />
           </div>
         </div>
-        <Button onClick={calculateBmi} className="w-full">Calculate</Button>
+        <Button onClick={calculateBmi} className="w-full">Calcular</Button>
       </CardContent>
       {result && (
         <CardFooter>
