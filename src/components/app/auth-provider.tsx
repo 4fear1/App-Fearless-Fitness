@@ -22,6 +22,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
 
   useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker
+        .register('/sw.js')
+        .then((registration) => console.log('Service Worker registered with scope:', registration.scope))
+        .catch((error) => console.error('Service Worker registration failed:', error));
+    }
+  }, []);
+
+  useEffect(() => {
     // Check if a user is logged in from a previous session
     const loggedInUser = sessionStorage.getItem('fearless-user');
     if (loggedInUser) {
