@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { WorkoutTab } from '@/components/app/workout-tab';
 import { DietTab } from '@/components/app/diet-tab';
@@ -7,6 +8,12 @@ import { CalculatorsTab } from '@/components/app/calculators-tab';
 import { Dumbbell, Utensils, Calculator } from 'lucide-react';
 
 export function MainDashboard() {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   return (
     <Tabs defaultValue="workout" className="w-full">
       <TabsList className="grid w-full grid-cols-3 h-14 rounded-lg">
@@ -24,10 +31,10 @@ export function MainDashboard() {
         </TabsTrigger>
       </TabsList>
       <TabsContent value="workout" className="mt-6">
-        <WorkoutTab />
+        {isClient ? <WorkoutTab /> : null}
       </TabsContent>
       <TabsContent value="diet" className="mt-6">
-        <DietTab />
+        {isClient ? <DietTab /> : null}
       </TabsContent>
       <TabsContent value="calculators" className="mt-6">
         <CalculatorsTab />
