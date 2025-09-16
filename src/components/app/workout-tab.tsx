@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import useLocalStorage from '@/hooks/use-local-storage';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -12,14 +12,28 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { Dumbbell, Plus, Trash2 } from 'lucide-react';
 import Image from 'next/image';
+import { useAuth } from '@/components/app/auth-provider';
 
 type Exercise = { name: string; series: string; reps: string; rest: string; completed: boolean; id: number; gifUrl?: string };
 type WorkoutPlans = { [key: string]: Exercise[] };
 
 export function WorkoutTab() {
   const { toast } = useToast();
-  const [plans, setPlans] = useLocalStorage<WorkoutPlans>('my-workouts', { 'Treino A': [] });
-  const [activePlan, setActivePlan] = useState(Object.keys(plans)[0] || '');
+  const { user } = useAuth();
+  const [plans, setPlans] = useLocalStorage<WorkoutPlans>(`my-workouts-${user?.username}`, { 'Treino A': [] });
+  
+  // Use a state for activePlan derived from plans, with a fallback.
+  const [activePlan, setActivePlan] = useState('');
+
+  useEffect(() => {
+    const planNames = Object.keys(plans);
+    if (planNames.length > 0 && !planNames.includes(activePlan)) {
+      setActivePlan(planNames[0]);
+    } else if (planNames.length === 0) {
+      setActivePlan('');
+    }
+  }, [plans, activePlan]);
+
 
   const [isAddPlanOpen, setAddPlanOpen] = useState(false);
   const [newPlanName, setNewPlanName] = useState('');
@@ -56,14 +70,13 @@ export function WorkoutTab() {
       });
       return;
     }
-    const newPlans = { ...plans };
-    delete newPlans[planName];
+    const { [planName]: _, ...newPlans } = plans;
     setPlans(newPlans);
-    setActivePlan(Object.keys(newPlans)[0]);
+    // Active plan will be updated by the useEffect
   };
   
   const handleAddExercise = () => {
-    if (exerciseName && exerciseSeries && exerciseReps && exerciseRest) {
+    if (exerciseName && exerciseSeries && exerciseReps && exerciseRest && activePlan) {
       const newExercise: Exercise = { 
         name: exerciseName, 
         series: exerciseSeries, 
@@ -73,7 +86,7 @@ export function WorkoutTab() {
         id: Date.now(),
         gifUrl: exerciseGifUrl
       };
-      const newPlans = { ...plans, [activePlan]: [...plans[activePlan], newExercise] };
+      const newPlans = { ...plans, [activePlan]: [...(plans[activePlan] || []), newExercise] };
       setPlans(newPlans);
       setExerciseName('');
       setExerciseSeries('');
@@ -85,17 +98,19 @@ export function WorkoutTab() {
       toast({
         variant: "destructive",
         title: "Erro",
-        description: "Por favor, preencha todos os campos do exercício.",
+        description: "Por favor, preencha todos os campos do exercício e selecione um plano.",
       });
     }
   };
   
   const handleRemoveExercise = (id: number) => {
+    if (!activePlan) return;
     const newPlans = { ...plans, [activePlan]: plans[activePlan].filter(ex => ex.id !== id) };
     setPlans(newPlans);
   };
   
   const toggleExerciseComplete = (id: number) => {
+    if (!activePlan) return;
     const newPlans = { ...plans, [activePlan]: plans[activePlan].map(ex => ex.id === id ? { ...ex, completed: !ex.completed } : ex) };
     setPlans(newPlans);
   };

@@ -9,11 +9,13 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Plus, Trash2, Utensils } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/components/app/auth-provider';
 
 type Meal = { name: string; description: string; id: number };
 
 export function DietTab() {
-  const [meals, setMeals] = useLocalStorage<Meal[]>('my-diet', []);
+  const { user } = useAuth();
+  const [meals, setMeals] = useLocalStorage<Meal[]>(`my-diet-${user?.username}`, []);
   const [isModalOpen, setModalOpen] = useState(false);
   const [mealName, setMealName] = useState('');
   const [mealDesc, setMealDesc] = useState('');

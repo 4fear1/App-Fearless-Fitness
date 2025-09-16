@@ -1,16 +1,41 @@
+"use client";
+
 import { MainDashboard } from '@/components/app/main-dashboard';
-import { Dumbbell, Github, Instagram, Mail } from 'lucide-react';
+import { Dumbbell, Github, Instagram, Mail, LogOut } from 'lucide-react';
+import { useAuth } from '@/components/app/auth-provider';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function Home() {
+  const { user, logout } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!user) {
+      router.push('/login');
+    }
+  }, [user, router]);
+
+  if (!user) {
+    return null; 
+  }
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="bg-background/80 backdrop-blur-sm sticky top-0 z-40 border-b">
-        <div className="container mx-auto flex h-16 items-center justify-center px-4 sm:px-6 lg:px-8">
+        <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3">
             <Dumbbell className="h-8 w-8 text-primary" />
             <h1 className="text-2xl md:text-3xl font-bold text-foreground font-headline">
               Fearless Fitness
             </h1>
+          </div>
+          <div className="flex items-center gap-4">
+            <span className="text-sm text-muted-foreground hidden sm:inline">Olá, {user.username}</span>
+            <button onClick={logout} className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
+              <LogOut className="h-5 w-5" />
+              Sair
+            </button>
           </div>
         </div>
       </header>
