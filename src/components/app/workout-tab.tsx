@@ -159,9 +159,9 @@ export function WorkoutTab() {
             {planNames.map(name => (
               <TabsTrigger key={name} value={name} className="relative group">
                 {name}
-                <button onClick={(e) => { e.stopPropagation(); handleRemovePlan(name); }} className="absolute -top-2 -right-2 bg-muted-foreground/50 hover:bg-destructive text-white rounded-full p-0.5 w-4 h-4 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <div role="button" tabIndex={0} onClick={(e) => { e.stopPropagation(); handleRemovePlan(name); }} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.stopPropagation(); handleRemovePlan(name); } }} className="absolute -top-2 -right-2 bg-muted-foreground/50 hover:bg-destructive text-white rounded-full p-0.5 w-4 h-4 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
                   <Trash2 className="w-2.5 h-2.5" />
-                </button>
+                </div>
               </TabsTrigger>
             ))}
           </TabsList>
