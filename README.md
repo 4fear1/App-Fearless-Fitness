@@ -1,6 +1,6 @@
 # Fearless Fitness 🏋️‍♂️
 
-<img width="468" height="485" alt="image" src="https://github.com/user-attachments/assets/6e47d74c-772f-400c-b71d-2bc9987db1e4" />
+
 <img width="1602" height="685" alt="image" src="https://github.com/user-attachments/assets/e6b1d2d0-df79-457d-965c-5324e612db05" />
 
 
