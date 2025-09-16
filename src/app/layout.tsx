@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   title: 'Fearless Fitness',
   description: 'Seu companheiro de fitness tudo-em-um',
   manifest: '/manifest.json',
+  icons: {
+    apple: '/apple-touch-icon.png', 
+  },
 };
 
 export default function RootLayout({
